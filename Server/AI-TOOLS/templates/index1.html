@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WellBot AI - Medica</title>
+    <style>
+        /* Reset */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 40px 20px;
+            color: #222;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            align-items: flex-start;
+        }
+
+        .chat-container {
+            background: #fff;
+            max-width: 650px;
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.15);
+            padding: 30px 40px 40px;
+            display: flex;
+            flex-direction: column;
+            font-size: 1.1rem;
+        }
+
+        h1 {
+            font-weight: 900;
+            color: #3b3b98;
+            margin-bottom: 15px;
+            text-align: center;
+            letter-spacing: 2px;
+            font-size: 2.6rem;
+            user-select: none;
+        }
+
+        p.note {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: center;
+            user-select: none;
+        }
+
+        form {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: none;
+        }
+
+        .input-box {
+            flex-grow: 1;
+            padding: 14px 20px;
+            border: 2px solid #bbb;
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.07);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .input-box:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 10px #667eea88;
+        }
+
+        button {
+            background: linear-gradient(45deg, #764ba2, #667eea);
+            border: none;
+            color: white;
+            padding: 0 28px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 6px 20px #667eea77;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #5a3e8a, #5c6bc0);
+            box-shadow: 0 8px 30px #5c6bc088;
+            transform: translateY(-2px);
+        }
+
+        .chat-history {
+            background: #f7f8fc;
+            border-radius: 20px;
+            padding: 25px 30px;
+            height: 400px;
+            overflow-y: auto;
+            box-shadow: inset 0 0 12px #aaa2;
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        .chat-history::-webkit-scrollbar {
+            width: 12px;
+        }
+        .chat-history::-webkit-scrollbar-track {
+            background: #e1e4f2;
+            border-radius: 10px;
+        }
+        .chat-history::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .chat-entry {
+            margin-bottom: 22px;
+            display: flex;
+            flex-direction: column;
+            max-width: 80%;
+            animation: fadeInUp 0.3s ease forwards;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+            padding: 12px 18px;
+            border-radius: 20px 20px 5px 20px;
+            box-shadow: 0 5px 15px rgba(102,126,234,0.3);
+            white-space: pre-wrap;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background: #e3e7fd;
+            color: #333;
+            padding: 14px 20px;
+            border-radius: 20px 20px 20px 5px;
+            box-shadow: 0 4px 15px rgba(162,168,235,0.5);
+            white-space: pre-wrap;
+            margin-top: 5px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .chat-container {
+                padding: 25px 20px 30px 20px;
+            }
+
+            h1 {
+                font-size: 2.1rem;
+            }
+
+            .input-box {
+                font-size: 0.95rem;
+            }
+
+            button {
+                font-size: 1rem;
+                padding: 0 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h1>WellBot AI</h1>
+        <p class="note"><strong>Note:</strong> This chatbot provides general information only. Always consult a healthcare professional for medical advice.</p>
+        <form id="chat-form" onsubmit="sendMessage(event)">
+            <label for="user_input">Ask a medical question:</label>
+            <input type="text" id="user_input" name="user_input" class="input-box" required autocomplete="off" placeholder="Type your medical question...">
+            <button type="submit">Ask</button>
+        </form>
+        <div class="chat-history" id="chat-history">
+            <!-- Chat messages will be appended here -->
+        </div>
+        <a href="http://localhost:3000/medicail" style="text-align: center; margin-top: 20px; color: #667eea; text-decoration: none;">Back to Medica</a>
+    </div>
+
+    <script>
+        const chatHistory = document.getElementById('chat-history');
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user_input');
+
+        async function sendMessage(event) {
+            event.preventDefault();
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            // Append user message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'chat-entry';
+            userDiv.innerHTML = `<p class="user-message">𝐲𝐨𝐮: ${message}</p>`;
+            chatHistory.appendChild(userDiv);
+            userInput.value = '';
+
+            // Scroll to bottom
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.response || 'Network error');
+
+                // Append bot response
+                const botDiv = document.createElement('div');
+                botDiv.className = 'chat-entry';
+                botDiv.innerHTML = `<p class="bot-message">𝐰𝐞𝐥𝐥𝐛𝐨𝐭: ${data.response}</p>`;
+                chatHistory.appendChild(botDiv);
+            } catch (error) {
+                const botDiv = document.createElement('div');
+                botDiv.className = 'chat-entry';
+                botDiv.innerHTML = `<p class="bot-message">𝐰𝐞𝐥𝐥𝐛𝐨𝐭: Error: ${error.message}</p>`;
+                chatHistory.appendChild(botDiv);
+            }
+
+            // Scroll to bottom
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        // Handle Enter key
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+company,brandName,formula,image,price
+GSK,Crocin,Paracetamol,/images/crocin-gsk-paracetamol.jpg,$5.00
+Abbott,Calpol,Paracetamol,/images/calpol-abbott-paracetamol.jpg,$5.20
+Medley,DOO-650,Paracetamol,/images/doo650-medley-paracetamol.jpg,$4.80
+Abbott,Brufen,Ibuprofen,/images/brufen-abbott-ibuprofen.jpg,$6.00
+Cipla,Ibugesic,Ibuprofen,/images/ibugesic-cipla-ibuprofen.jpg,$5.80
+USV,Ecosprin,Aspirin,/images/ecosprin-usv-aspirin.jpg,$4.50
+Reckitt,Disprin,Aspirin,/images/disprin-reckitt-aspirin.jpg,$4.70
+GSK,Amoxil,Amoxicillin,/images/amoxil-gsk-amoxicillin.jpg,$8.00
+Sun Pharma,Mox,Amoxicillin,/images/mox-sunpharma-amoxicillin.jpg,$7.80
+Alembic,Azithral,Azithromycin,/images/azithral-alembic-azithromycin.jpg,$9.00
+Pfizer,Zithromax,Azithromycin,/images/zithromax-pfizer-azithromycin.jpg,$9.20
+Dr. Reddy’s,Cetzine,Cetirizine,/images/cetzine-drreddys-cetirizine.jpg,$3.50
+Cipla,Okacet,Cetirizine,/images/okacet-cipla-cetirizine.jpg,$3.40
+Johnson & Johnson,Benadryl,Diphenhydramine,/images/benadryl-jj-diphenhydramine.jpg,$4.00
+J.B. Chemicals,Rantac,Ranitidine,/images/rantac-jbchemicals-ranitidine.jpg,$5.50
+Sun Pharma,Famocid,Famotidine,/images/famocid-sunpharma-famotidine.jpg,$5.60
+Janssen,Imodium,Loperamide,/images/imodium-janssen-loperamide.jpg,$3.00
+Micro Labs,Eldoper,Loperamide,/images/eldoper-microlabs-loperamide.jpg,$2.90
+FDC,Electral,ORS,/images/electral-fdc-ors.jpg,$2.00
+Cipla,Enerzal,ORS,/images/enerzal-cipla-ors.jpg,$2.10
+Cipla,Emeset,Ondansetron,/images/emeset-cipla-ondansetron.jpg,$6.50
+Alkem,Ondem,Ondansetron,/images/ondem-alkem-ondansetron.jpg,$6.40
+Pfizer,Corex-D,Dextromethorphan,/images/corexd-pfizer-dextromethorphan.jpg,$4.80
+Johnson & Johnson,Benadryl-D,Dextromethorphan,/images/benadryld-jj-dextromethorphan.jpg,$4.90
+Cipla,Asthalin,Salbutamol,/images/asthalin-cipla-salbutamol.jpg,$7.00
+GSK,Ventolin,Salbutamol,/images/ventolin-gsk-salbutamol.jpg,$7.10
+Pfizer,Cortizone-10,Hydrocortisone Cream,/images/cortizone10-pfizer-hydrocortisone.jpg,$5.20
+Zydus,Cortimate,Hydrocortisone Cream,/images/cortimate-zydus-hydrocortisone.jpg,$5.30
+Win-Medicare,Betadine,Povidone-Iodine,/images/betadine-winmedicare-povidone.jpg,$3.80
+Glenmark,Candid,Clotrimazole Cream,/images/candid-glenmark-clotrimazole.jpg,$4.90
+Bayer,Canesten,Clotrimazole Cream,/images/canesten-bayer-clotrimazole.jpg,$5.00
+Piramal,Caladryl,Calamine Lotion,/images/caladryl-piramal-calamine.jpg,$3.20
+Nykaa,Lacto Calamine,Calamine Lotion,/images/lactocalamine-nykaa-calamine.jpg,$3.30
+Pfizer,Becosules,Multivitamins,/images/becosules-pfizer-multivitamins.jpg,$10.00
+Bayer,Supradyn,Multivitamins,/images/supradyn-bayer-multivitamins.jpg,$10.20
+Abbott,Livogen,Iron + Folic Acid,/images/livogen-abbott-ironfolic.jpg,$6.80
+Macleods,Feronia-XT,Iron + Folic Acid,/images/feroniaxt-macleods-ironfolic.jpg,$6.90
+Pfizer,Gelusil,Antacids,/images/gelusil-pfizer-antacids.jpg,$4.00
+Abbott,Digene,Antacids,/images/digene-abbott-antacids.jpg,$4.10
+USV,Glycomet,Metformin,/images/glycomet-usv-metformin.jpg,$6.00
+Franco-Indian,Gluconorm,Metformin,/images/gluconorm-francoindian-metformin.jpg,$6.20
+Sanofi,Amaryl,Glimepiride,/images/amaryl-sanofi-glimepiride.jpg,$7.50
+Glenmark,Glinate,Glimepiride,/images/glinate-glenmark-glimepiride.jpg,$7.30
+Micro Labs,Amlong,Amlodipine,/images/amlong-microlabs-amlodipine.jpg,$5.00
+Cipla,Stamlo,Amlodipine,/images/stamlo-cipla-amlodipine.jpg,$5.10
+Glenmark,Telma,Telmisartan,/images/telma-glenmark-telmisartan.jpg,$6.80
+Cipla,Telpres,Telmisartan,/images/telpres-cipla-telmisartan.jpg,$6.90
+Torrent,Losar,Losartan,/images/losar-torrent-losartan.jpg,$6.50
+Sun Pharma,Repace,Losartan,/images/repace-sunpharma-losartan.jpg,$6.40
+Pfizer,Lipitor,Atorvastatin,/images/lipitor-pfizer-atorvastatin.jpg,$8.00
+Zydus,Atocor,Atorvastatin,/images/atocor-zydus-atorvastatin.jpg,$7.90
+AstraZeneca,Crestor,Rosuvastatin,/images/crestor-astrazeneca-rosuvastatin.jpg,$8.50
+Sun Pharma,Rozavel,Rosuvastatin,/images/rozavel-sunpharma-rosuvastatin.jpg,$8.30
+Abbott,Thyronorm,Levothyroxine,/images/thyronorm-abbott-levothyroxine.jpg,$4.50
+GSK,Eltroxin,Levothyroxine,/images/eltroxin-gsk-levothyroxine.jpg,$4.60
+Dr. Reddy’s,Razo,Rabeprazole,/images/razo-drreddys-rabeprazole.jpg,$5.70
+Cipla,Rabicip,Rabeprazole,/images/rabicip-cipla-rabeprazole.jpg,$5.60
+Sun Pharma,Pantocid,Pantoprazole,/images/pantocid-sunpharma-pantoprazole.jpg,$5.00
+Alkem,Pan 40,Pantoprazole,/images/pan40-alkem-pantoprazole.jpg,$4.90
+Sun Pharma,Montek LC,Montelukast,/images/monteklc-sunpharma-montelukast.jpg,$6.00
+Cipla,Telekast-L,Montelukast,/images/telekastl-cipla-montelukast.jpg,$5.90
+Cipla,Levocet,Levocetirizine,/images/levocet-cipla-levocetirizine.jpg,$3.80
+Mankind,LCZ,Levocetirizine,/images/lcz-mankind-levocetirizine.jpg,$3.70
+Abbott,CPM,Chlorpheniramine,/images/cpm-abbott-chlorpheniramine.jpg,$3.00
+Mankind,Allerga,Chlorpheniramine,/images/allerga-mankind-chlorpheniramine.jpg,$3.10
+Alembic,Glycodin,Guaifenesin,/images/glycodin-alembic-guaifenesin.jpg,$4.50
+Glenmark,Ascoril,Guaifenesin,/images/ascoril-glenmark-guaifenesin.jpg,$4.60
+GlaxoSmithKline,T-Bact,Mupirocin,/images/tbact-gsk-mupirocin.jpg,$5.50
+Cipla,O2,Ofloxacin + Ornidazole,/images/o2-cipla-ofloxacinornidazole.jpg,$7.00
+Macleods,Oflomac-OZ,Ofloxacin + Ornidazole,/images/oflomacoz-macleods-ofloxacinornidazole.jpg,$6.90
+Sun Pharma,Cifran,Ciprofloxacin,/images/cifran-sunpharma-ciprofloxacin.jpg,$6.50
+Cipla,Ciplox,Ciprofloxacin,/images/ciplox-cipla-ciprofloxacin.jpg,$6.40
+ICPA,Hexidine,Chlorhexidine Mouthwash,/images/hexidine-icpa-chlorhexidine.jpg,$3.50
+Dr. Reddy’s,Clohex,Chlorhexidine Mouthwash,/images/clohex-drreddys-chlorhexidine.jpg,$3.60
+Allergan,Refresh Tears,Carboxymethylcellulose,/images/refreshtears-allergan-carboxymethylcellulose.jpg,$8.00
+Cipla,Tearfree,Carboxymethylcellulose,/images/tearfree-cipla-carboxymethylcellulose.jpg,$7.80
+Novartis,Voveran Gel,Diclofenac Gel,/images/voverangel-novartis-diclofenac.jpg,$4.80
+Troikaa,Dynapar Gel,Diclofenac Gel,/images/dynapargel-troikaa-diclofenac.jpg,$4.90

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hospitals with Navigation Panel</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+  <style>
+    html, body, #map {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    #hospital-panel {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 350px;
+      max-height: 400px;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      overflow-y: auto;
+      padding: 15px;
+      z-index: 1000;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      font-size: 14px;
+      color: #222;
+    }
+
+    #hospital-panel.hidden {
+      transform: translateX(400px);
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    #hospital-panel h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+      color: #0078d7;
+      border-bottom: 2px solid #0078d7;
+      padding-bottom: 6px;
+    }
+
+    .hospital-card {
+      background: #f0f6ff;
+      border-radius: 8px;
+      padding: 12px 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,120,215,0.1);
+      transition: background 0.25s ease;
+    }
+
+    .hospital-card:hover {
+      background: #d0e2ff;
+    }
+
+    .hospital-card b {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+      color: #004a99;
+    }
+
+    .hospital-card small {
+      display: block;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .hospital-card button {
+      background-color: #0078d7;
+      border: none;
+      padding: 8px 18px;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .hospital-card button:hover {
+      background-color: #005ea2;
+    }
+
+    #toggle-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #0078d7;
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 120, 215, 0.3);
+      z-index: 1100;
+      font-size: 16px;
+      font-weight: bold;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+
+    #toggle-btn:hover {
+      background-color: #005ea2;
+    }
+
+    .leaflet-routing-container {
+      background: rgba(255, 255, 255, 0.95);
+      max-height: 300px;
+      overflow-y: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <button id="toggle-btn" title="Toggle Hospital List">Find Nearby Hospitals</button>
+
+  <div id="hospital-panel" class="hidden">
+    <h3>Nearby Hospitals</h3>
+    <div id="hospital-list">Loading hospitals...</div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
+
+  <script>
+    const MAPTILER_KEY = 'AiN8UMCsdlOHIQMlFRGh';
+    const map = L.map('map').setView([20.5937, 78.9629], 5);
+
+    L.tileLayer(
+      `https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`,
+      {
+        attribution:
+          '&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; OpenStreetMap contributors',
+        maxZoom: 19,
+      }
+    ).addTo(map);
+
+    let userMarker, userLocation = null;
+    let routingControl = null;
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        userLocation = [lat, lng];
+
+        map.setView(userLocation, 14);
+
+        userMarker = L.marker(userLocation)
+          .addTo(map)
+          .bindPopup('You are here')
+          .openPopup();
+
+        const hospitals = await fetchHospitals(lat, lng);
+        showHospitals(hospitals, userLocation);
+      },
+      () => {
+        alert('Could not get your location. Please allow location access.');
+        document.getElementById('hospital-list').innerText = 'Location not available.';
+      }
+    );
+
+    async function fetchHospitals(lat, lng) {
+      const viewbox = `${lng - 0.05},${lat + 0.05},${lng + 0.05},${lat - 0.05}`;
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=hospital&limit=20&bounded=1&viewbox=${viewbox}`;
+      try {
+        const res = await fetch(url, {
+          headers: { 'User-Agent': 'HospitalFinder/1.0' },
+        });
+        if (!res.ok) throw new Error('Failed fetching');
+        return await res.json();
+      } catch {
+        alert('Error fetching hospitals');
+        return [];
+      }
+    }
+
+    function showHospitals(hospitals, userLoc) {
+      const list = document.getElementById('hospital-list');
+      list.innerHTML = '';
+
+      hospitals.forEach(hosp => {
+        const lat = parseFloat(hosp.lat);
+        const lng = parseFloat(hosp.lon);
+        const dist = haversine(userLoc[0], userLoc[1], lat, lng).toFixed(2);
+
+        if (dist <= 5) {
+          L.marker([lat, lng])
+            .addTo(map)
+            .bindPopup(`<b>${hosp.display_name.split(',')[0]}</b><br>${dist} km away`);
+
+          const card = document.createElement('div');
+          card.className = 'hospital-card';
+
+          card.innerHTML = `
+            <b>${hosp.display_name.split(',')[0]}</b>
+            <small>Distance: ${dist} km</small>
+          `;
+
+          const btn = document.createElement('button');
+          btn.textContent = 'Show Navigation';
+          btn.onclick = () => openRouteOnMap(userLoc, [lat, lng]);
+
+          card.appendChild(btn);
+          list.appendChild(card);
+        }
+      });
+
+      if (list.innerHTML === '') {
+        list.innerHTML = 'No hospitals found within 5 km.';
+      }
+    }
+
+    function haversine(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = ((lat2 - lat1) * Math.PI) / 180;
+      const dLon = ((lon2 - lon1) * Math.PI) / 180;
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos((lat1 * Math.PI) / 180) *
+          Math.cos((lat2 * Math.PI) / 180) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    function openRouteOnMap(start, end) {
+      if (!start) {
+        alert('User location not available.');
+        return;
+      }
+
+      if (routingControl) {
+        map.removeControl(routingControl);
+      }
+
+      routingControl = L.Routing.control({
+        waypoints: [
+          L.latLng(start[0], start[1]),
+          L.latLng(end[0], end[1])
+        ],
+        routeWhileDragging: false,
+        showAlternatives: false,
+        draggableWaypoints: false,
+        addWaypoints: false,
+        fitSelectedRoutes: true,
+        lineOptions: {
+          styles: [{ color: '#0078d7', opacity: 0.8, weight: 5 }]
+        },
+        createMarker: function(i, wp) {
+          return L.marker(wp.latLng);
+        }
+      }).addTo(map);
+    }
+
+    document.getElementById('toggle-btn').onclick = () => {
+      document.getElementById('hospital-panel').classList.toggle('hidden');
+    };
+  </script>
+</body>
+</html>

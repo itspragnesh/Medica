@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prescription Analyzer - Medica</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 40px 20px;
+            color: #222;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            align-items: flex-start;
+        }
+
+        .container {
+            background: #fff;
+            max-width: 650px;
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.15);
+            padding: 30px 40px 40px;
+            display: flex;
+            flex-direction: column;
+            font-size: 1.1rem;
+        }
+
+        h1 {
+            font-weight: 900;
+            color: #3b3b98;
+            margin-bottom: 15px;
+            text-align: center;
+            letter-spacing: 2px;
+            font-size: 2.6rem;
+            user-select: none;
+        }
+
+        p.note {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: center;
+            user-select: none;
+        }
+
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: center;
+        }
+
+        .upload-box {
+            padding: 14px 20px;
+            border: 2px solid #bbb;
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.07);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background: #f7f8fc;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .upload-box:hover, .upload-box:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 10px #667eea88;
+        }
+
+        button {
+            background: linear-gradient(45deg, #764ba2, #667eea);
+            border: none;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 6px 20px #667eea77;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #5a3e8a, #5c6bc0);
+            box-shadow: 0 8px 30px #5c6bc088;
+            transform: translateY(-2px);
+        }
+
+        .result-section {
+            background: #f7f8fc;
+            border-radius: 20px;
+            padding: 25px 30px;
+            min-height: 200px;
+            overflow-y: auto;
+            box-shadow: inset 0 0 12px #aaa2;
+            scroll-behavior: smooth;
+        }
+
+        .result-section::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .result-section::-webkit-scrollbar-track {
+            background: #e1e4f2;
+            border-radius: 10px;
+        }
+
+        .result-section::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .result-entry {
+            margin-bottom: 22px;
+            display: flex;
+            flex-direction: column;
+            max-width: 100%;
+            animation: fadeInUp 0.3s ease forwards;
+        }
+
+        .result-message {
+            background: #e3e7fd;
+            color: #333;
+            padding: 14px 20px;
+            border-radius: 20px 20px 20px 5px;
+            box-shadow: 0 4px 15px rgba(162,168,235,0.5);
+            white-space: pre-wrap;
+        }
+
+        .preview-image {
+            max-width: 100px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 25px 20px 30px 20px;
+            }
+
+            h1 {
+                font-size: 2.1rem;
+            }
+
+            .upload-box {
+                font-size: 0.95rem;
+            }
+
+            button {
+                font-size: 1rem;
+                padding: 10px 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prescription Analyzer</h1>
+        <p class="note"><strong>Note:</strong> This tool helps interpret prescriptions. For verified guidance, consult a pharmacist or doctor.</p>
+        <form id="upload-form" class="upload-form">
+            <input type="file" id="image-upload" class="upload-box" accept=".png,.jpg,.jpeg" required>
+            <button type="submit">Analyze Prescription</button>
+        </form>
+        <div class="result-section" id="result-section">
+            <!-- Analysis results will appear here -->
+        </div>
+        <a href="http://localhost:3000/medicail" style="text-align: center; margin-top: 20px; color: #667eea; text-decoration: none;">Back to Medica</a>
+    </div>
+
+    <script>
+        const uploadForm = document.getElementById('upload-form');
+        const imageUpload = document.getElementById('image-upload');
+        const resultSection = document.getElementById('result-section');
+
+        uploadForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const file = imageUpload.files[0];
+            if (!file) {
+                alert('Please select an image.');
+                return;
+            }
+
+            // Preview uploaded prescription image
+            const reader = new FileReader();
+            reader.onload = () => {
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'result-entry';
+                resultDiv.innerHTML = `<img src="${reader.result}" class="preview-image" alt="Uploaded Prescription">`;
+                resultSection.appendChild(resultDiv);
+                resultSection.scrollTop = resultSection.scrollHeight;
+            };
+            reader.readAsDataURL(file);
+
+            // Send image to backend
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.response || 'Network error');
+
+                // Display extracted prescription data
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'result-entry';
+                resultDiv.innerHTML = `<p class="result-message">${data.response}</p>`;
+                resultSection.appendChild(resultDiv);
+            } catch (error) {
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'result-entry';
+                resultDiv.innerHTML = `<p class="result-message">Error: ${error.message}</p>`;
+                resultSection.appendChild(resultDiv);
+            }
+
+            imageUpload.value = '';
+            resultSection.scrollTop = resultSection.scrollHeight;
+        });
+    </script>
+</body>
+</html>

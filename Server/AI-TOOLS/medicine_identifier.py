@@ -8,9 +8,22 @@ import base64
 from io import BytesIO
 from PIL import Image
 import pytesseract
+from shutil import which
 
-# Set the path to the Tesseract executable (Windows only)
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"  # Change path if needed
+# Try to detect tesseract executable automatically
+tesseract_path = which("tesseract")
+if tesseract_path:
+    pytesseract.pytesseract.tesseract_cmd = tesseract_path
+else:
+    # Optionally fallback to Windows path if on Windows and executable exists
+    if os.name == 'nt':
+        default_windows_path = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+        if os.path.exists(default_windows_path):
+            pytesseract.pytesseract.tesseract_cmd = default_windows_path
+        else:
+            raise EnvironmentError("Tesseract executable not found. Please install Tesseract and ensure it is in your PATH.")
+    else:
+        raise EnvironmentError("Tesseract executable not found. Please install Tesseract and ensure it is in your PATH.")
 
 # Load environment variables
 load_dotenv()

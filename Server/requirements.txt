@@ -1,5 +1,7 @@
 flask
-requests
+flask-cors
+python-dotenv
+google-generativeai
+werkzeug
 pillow
-numpy
-# add any other packages you use in AI-TOOLS scripts
+pytesseract

@@ -8,6 +8,7 @@ import base64
 from io import BytesIO
 from PIL import Image
 import pytesseract
+from shutil import which
 
 # Load environment variables
 load_dotenv()
@@ -15,8 +16,19 @@ api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
     raise ValueError("GEMINI_API_KEY not found in .env file")
 
-# Set the path to the Tesseract executable (modify as needed for your system)
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+# Auto-detect tesseract executable path for deployment compatibility
+tesseract_path = which("tesseract")
+if tesseract_path:
+    pytesseract.pytesseract.tesseract_cmd = tesseract_path
+else:
+    if os.name == 'nt':
+        default_windows_path = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+        if os.path.exists(default_windows_path):
+            pytesseract.pytesseract.tesseract_cmd = default_windows_path
+        else:
+            raise EnvironmentError("Tesseract executable not found. Please install Tesseract and add it to your PATH.")
+    else:
+        raise EnvironmentError("Tesseract executable not found. Please install Tesseract and add it to your PATH.")
 
 # Configure Gemini API
 genai.configure(api_key=api_key)
@@ -96,6 +108,8 @@ def identify_medicine():
         error_msg = str(e)
         if "API key" in error_msg.lower():
             return jsonify({"response": "Error: Invalid API key. Check your GEMINI_API_KEY."}), 500
+        if "tesseract" in error_msg.lower():
+            return jsonify({"response": "Error: Tesseract is not installed or not configured correctly."}), 500
         return jsonify({"response": f"Error: {error_msg}"}), 500
 
 if __name__ == "__main__":

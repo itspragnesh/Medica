@@ -22,6 +22,9 @@
     "nodemon": "^3.1.10"
   }
   "scripts": {
-    "start": "node seed.js && python AI-TOOLS/run.py & node Server.js"
-  }
+  "seed": "node seed.js",
+  "start-server": "node Server.js",
+  "ai-tools": "python AI-TOOLS/run.py",
+  "start": "npm run seed && concurrently \"npm run start-server\" \"npm run ai-tools\""
+}
 }

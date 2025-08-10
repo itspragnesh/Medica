@@ -2,14 +2,17 @@
   "name": "server",
   "version": "1.0.0",
   "main": "Server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon Server.js"
-  },
+  "description": "",
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "node seed.js",
+    "start-server": "node Server.js",
+    "ai-tools": "python AI-TOOLS/run.py",
+    "start": "npm run seed && concurrently \"npm run start-server\" \"npm run ai-tools\""
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "connect-mongodb-session": "^5.0.0",
@@ -19,12 +22,7 @@
     "express-validator": "^7.2.1",
     "mongodb": "^6.16.0",
     "mongoose": "^8.14.2",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "concurrently": "^9.0.1"
   }
-  "scripts": {
-  "seed": "node seed.js",
-  "start-server": "node Server.js",
-  "ai-tools": "python AI-TOOLS/run.py",
-  "start": "npm run seed && concurrently \"npm run start-server\" \"npm run ai-tools\""
-}
 }
